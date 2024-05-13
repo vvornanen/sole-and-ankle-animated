@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components/macro";
 
 import { WEIGHTS } from "../../constants";
 import { formatPrice, pluralize, isNewShoe } from "../../utils";
@@ -82,15 +82,55 @@ const ZoomContainer = styled.div`
   overflow: hidden;
 `;
 
+const jump = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+const flashAndFocus = keyframes`
+  0% {
+    filter: contrast(100%) blur(0);
+  }
+  10% {
+    filter: contrast(110%) blur(var(--blur));
+  }
+  30% {
+    filter: contrast(105%) blur(0);
+  }
+  100% {
+    filter: contrast(100%) blur(0);
+  }
+`;
+
 const Image = styled.img`
   display: block;
   width: 100%;
   transition: transform 500ms;
   transform-origin: 50% 90%;
 
-  ${Link}:hover &, ${Link}:focus & {
-    transform: scale(1.1);
-    transition-duration: 200ms;
+  @media (prefers-reduced-motion: no-preference) {
+    --blur: 4px;
+
+    ${Link}:hover &, ${Link}:focus & {
+      transform: scale(1.1);
+      transition: transform 200ms;
+      animation: ${flashAndFocus} 1500ms both cubic-bezier(0, 0.73, 0.3, 1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    --blur: 0;
+
+    ${Link}:hover &, ${Link}:focus & {
+      animation: ${flashAndFocus} 2000ms both;
+    }
   }
 `;
 
@@ -131,6 +171,12 @@ const Flag = styled.div`
   font-weight: ${WEIGHTS.bold};
   color: var(--color-white);
   border-radius: 2px;
+
+  @media (prefers-reduced-motion: no-preference) {
+    ${Link}:hover &, ${Link}:focus & {
+      animation: ${jump} 400ms ease-out;
+    }
+  }
 `;
 
 const SaleFlag = styled(Flag)`
