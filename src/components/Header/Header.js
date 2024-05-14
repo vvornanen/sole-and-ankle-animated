@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { QUERIES, WEIGHTS } from '../../constants';
-import Logo from '../Logo';
-import Icon from '../Icon';
-import UnstyledButton from '../UnstyledButton';
-import SuperHeader from '../SuperHeader';
-import MobileMenu from '../MobileMenu';
-import VisuallyHidden from '../VisuallyHidden';
+import { QUERIES, WEIGHTS } from "../../constants";
+import Logo from "../Logo";
+import Icon from "../Icon";
+import UnstyledButton from "../UnstyledButton";
+import SuperHeader from "../SuperHeader";
+import MobileMenu from "../MobileMenu";
+import VisuallyHidden from "../VisuallyHidden";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -20,12 +20,12 @@ const Header = () => {
           <Logo />
         </LogoWrapper>
         <DesktopNav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <FlipLink href="/sale">Sale</FlipLink>
+          <FlipLink href="/new">New&nbsp;Releases</FlipLink>
+          <FlipLink href="/men">Men</FlipLink>
+          <FlipLink href="/women">Women</FlipLink>
+          <FlipLink href="/kids">Kids</FlipLink>
+          <FlipLink href="/collections">Collections</FlipLink>
         </DesktopNav>
         <MobileActions>
           <ShoppingBagButton>
@@ -115,15 +115,83 @@ const Filler = styled.div`
 `;
 
 const NavLink = styled.a`
+  --flip-duration: 200ms;
+  --flip-depth: 1em;
+  --flip-ease: cubic-bezier(0.5, 0, 0.5, 1);
+  --flip-transition: var(--flip-duration) var(--flip-ease);
+
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
+  perspective: 200px;
 
   &:first-of-type {
     color: var(--color-secondary);
   }
 `;
+
+const Flip = styled.div`
+  position: absolute;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform var(--flip-transition),
+      opacity var(--flip-transition);
+    transform: translateZ(calc(var(--flip-depth) * -1)) rotateX(0deg)
+      translateZ(var(--flip-depth));
+
+    ${NavLink}:hover &, ${NavLink}:focus & {
+      transform: translateZ(calc(var(--flip-depth) * -1)) rotateX(90deg)
+        translateZ(var(--flip-depth));
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity var(--flip-transition);
+
+    ${NavLink}:hover &, ${NavLink}:focus & {
+      opacity: 0;
+    }
+  }
+`;
+
+const FlipBottom = styled.div`
+  font-weight: ${WEIGHTS.bold};
+  opacity: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform var(--flip-transition),
+      opacity var(--flip-transition);
+    transform: translateZ(calc(var(--flip-depth) * -1)) rotateX(-90deg)
+      translateZ(var(--flip-depth));
+
+    ${NavLink}:hover &, ${NavLink}:focus & {
+      transform: translateZ(calc(var(--flip-depth) * -1)) rotateX(0deg)
+        translateZ(var(--flip-depth));
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity var(--flip-transition);
+
+    ${NavLink}:hover &, ${NavLink}:focus & {
+      opacity: 1;
+    }
+  }
+`;
+
+const FlipLink = ({ children, ...props }) => {
+  return (
+    <NavLink {...props}>
+      <Flip>{children}</Flip>
+      <FlipBottom aria-hidden={true}>{children}</FlipBottom>
+    </NavLink>
+  );
+};
 
 export default Header;
