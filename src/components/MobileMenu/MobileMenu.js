@@ -10,6 +10,13 @@ import Icon from "../Icon";
 import VisuallyHidden from "../VisuallyHidden";
 
 const MobileMenu = ({ isOpen, onDismiss }) => {
+  const initialDelay = 200;
+  const delayPerItem = 75;
+
+  const style = (index) => ({
+    "--animation-delay": `${initialDelay + index * delayPerItem}ms`,
+  });
+
   return (
     <Overlay isOpen={isOpen} onDismiss={onDismiss}>
       <Content aria-label="Menu">
@@ -19,17 +26,35 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
         </CloseButton>
         <Filler />
         <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLink href="/sale" style={style(0)}>
+            Sale
+          </NavLink>
+          <NavLink href="/new" style={style(1)}>
+            New&nbsp;Releases
+          </NavLink>
+          <NavLink href="/men" style={style(2)}>
+            Men
+          </NavLink>
+          <NavLink href="/women" style={style(3)}>
+            Women
+          </NavLink>
+          <NavLink href="/kids" style={style(4)}>
+            Kids
+          </NavLink>
+          <NavLink href="/collections" style={style(5)}>
+            Collections
+          </NavLink>
         </Nav>
         <Footer>
-          <SubLink href="/terms">Terms and Conditions</SubLink>
-          <SubLink href="/privacy">Privacy Policy</SubLink>
-          <SubLink href="/contact">Contact Us</SubLink>
+          <SubLink href="/terms" style={style(6)}>
+            Terms and Conditions
+          </SubLink>
+          <SubLink href="/privacy" style={style(7)}>
+            Privacy Policy
+          </SubLink>
+          <SubLink href="/contact" style={style(8)}>
+            Contact Us
+          </SubLink>
         </Footer>
       </Content>
     </Overlay>
@@ -108,8 +133,6 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: ${contentFadeIn} 300ms both var(--ease-in-out);
-  animation-delay: 500ms;
 `;
 
 const NavLink = styled.a`
@@ -118,6 +141,8 @@ const NavLink = styled.a`
   text-decoration: none;
   font-size: 1.125rem;
   text-transform: uppercase;
+  animation: ${contentFadeIn} 300ms both var(--ease-in-out);
+  animation-delay: var(--animation-delay);
 
   &:first-of-type {
     color: var(--color-secondary);
@@ -133,14 +158,14 @@ const Footer = styled.footer`
   flex-direction: column;
   gap: 14px;
   justify-content: flex-end;
-  animation: ${contentFadeIn} 300ms both var(--ease-in-out);
-  animation-delay: 600ms;
 `;
 
 const SubLink = styled.a`
   color: var(--color-gray-700);
   font-size: 0.875rem;
   text-decoration: none;
+  animation: ${contentFadeIn} 300ms both var(--ease-in-out);
+  animation-delay: var(--animation-delay);
 `;
 
 export default MobileMenu;
