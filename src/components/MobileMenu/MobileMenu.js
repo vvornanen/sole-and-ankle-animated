@@ -45,12 +45,12 @@ const backdropFadeIn = keyframes`
   }
 `;
 
-const slideIn = keyframes`
+const swingIn = keyframes`
   from {
-    transform: translateX(100%);
+    transform: rotateY(-120deg);
   }
   to {
-    transform: translateX(0%);
+    transform: rotateY(0deg);
   }
 `;
 
@@ -75,6 +75,7 @@ const Overlay = styled(DialogOverlay)`
   display: flex;
   justify-content: flex-end;
   animation: ${backdropFadeIn} 400ms both var(--ease-in-out);
+  perspective: 1200px;
 `;
 
 const Content = styled(DialogContent)`
@@ -87,7 +88,8 @@ const Content = styled(DialogContent)`
   animation-delay: 200ms;
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: ${slideIn} 300ms both var(--ease-out);
+    animation: ${swingIn} 1000ms both var(--ease-out);
+    transform-origin: 100% 50%;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -107,7 +109,7 @@ const Nav = styled.nav`
   flex-direction: column;
   gap: 16px;
   animation: ${contentFadeIn} 300ms both var(--ease-in-out);
-  animation-delay: 400ms;
+  animation-delay: 500ms;
 `;
 
 const NavLink = styled.a`
@@ -132,7 +134,7 @@ const Footer = styled.footer`
   gap: 14px;
   justify-content: flex-end;
   animation: ${contentFadeIn} 300ms both var(--ease-in-out);
-  animation-delay: 500ms;
+  animation-delay: 600ms;
 `;
 
 const SubLink = styled.a`
